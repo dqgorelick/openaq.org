@@ -18,6 +18,13 @@ const subMenus = [
         url: '/locations'
       },
       {
+        title: 'Projects',
+        description: 'Projects page',
+        className: 'sub-menu__link--locations',
+        url: '/projects'
+      },
+
+      {
         title: 'Countries',
         description: 'Air quality data by country.',
         className: 'sub-menu__link--countries',

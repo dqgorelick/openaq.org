@@ -22,6 +22,7 @@ import CommunityWorkshops from './views/community-workshops';
 import Map from './views/map';
 import LocationsHub from './views/locations-hub';
 import LocationItem from './views/location';
+import ProjectsHub from './views/projects-hub';
 import CountriesHub from './views/countries-hub';
 import Country from './views/country';
 import Compare from './views/compare';
@@ -56,6 +57,7 @@ render((
         <Route name='communityWorkshops' path='community/workshops' component={CommunityWorkshops} pageClass='page--community-workshops' />
         <Route name='map' path='map' component={Map} pageClass='page--map' />
         <Route name='locationsHub' path='locations' component={LocationsHub} pageClass='page--locations-hub page--dark' />
+        <Route name='projectsHub' path='projects' component={ProjectsHub} pageClass='page--projects-hub page--dark' />
         <Route name='location' path='location/:name' component={LocationItem} pageClass='page--locations-single page--dark' />
         <Route name='countriesHub' path='countries' component={CountriesHub} pageClass='page--countries-hub page--dark' />
         <Route name='country' path='countries/:name' component={Country} pageClass='page--countries-single page--dark' />
