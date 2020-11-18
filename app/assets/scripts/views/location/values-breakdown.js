@@ -9,6 +9,8 @@ import Card, {
   CardTitle,
 } from '../../components/card';
 import TabbedSelector from '../../components/tabbed-selector';
+import DateRange from '../../components/date-range';
+import { DevseedUiThemeProvider } from '@devseed-ui/theme-provider';
 
 const ErrorMessage = styled.div`
   grid-column: 1 / -1;
@@ -47,6 +49,7 @@ export default function ValuesBreakdown({ measurements, parameters }) {
   }
 
   return (
+    <DevseedUiThemeProvider>
     <Card
       gridColumn={'1  / -1'}
       renderHeader={() => (
@@ -57,6 +60,11 @@ export default function ValuesBreakdown({ measurements, parameters }) {
             onTabSelect={t => {
               setActiveTab(t);
             }}
+          />
+          <DateRange
+            //range={dateRange}
+            onChange={() => {}}
+            
           />
           <CardTitle>Time Series Data</CardTitle>
         </CardHeader>
@@ -71,6 +79,7 @@ export default function ValuesBreakdown({ measurements, parameters }) {
       )}
       renderFooter={() => null}
     />
+    </DevseedUiThemeProvider>
   );
 }
 
