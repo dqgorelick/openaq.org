@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PropTypes as T } from 'prop-types';
 import styled from 'styled-components';
 import qs from 'qs';
+import moment from 'moment';
 
 import config from '../../config';
 import LoadingMessage from '../loading-message';
@@ -28,12 +29,7 @@ const defaultState = {
   data: null,
 };
 
-export default function TimeSeriesCard({
-  locationId,
-  projectId,
-  parameters,
-  dateRange,
-}) {
+export default function TimeSeriesCard({ locationId, projectId, parameters }) {
   // eslint-disable-next-line no-unused-vars
   const [{ fetched, fetching, error, data }, setState] = useState(defaultState);
 
@@ -41,11 +37,8 @@ export default function TimeSeriesCard({
     id: parameters[0].parameter || parameters[0],
     name: parameters[0].parameter || parameters[0],
   });
-
-  const [year, month, day] = dateRange ? dateRange.split('/') : [];
-
   // eslint-disable-next-line no-unused-vars
-  const [temporal, setTemporal] = useState(day ? 'hour' : 'day');
+  const [temporal, setTemporal] = useState('hour');
 
   useEffect(() => {
     const fetchData = () => {
@@ -54,16 +47,9 @@ export default function TimeSeriesCard({
       let query = {
         parameter: activeTab.id,
         temporal,
-        ...(dateRange
-          ? {
-              date_from: new Date(year, month - 1, day || 1),
-              date_to: day
-                ? new Date(year, month - 1, day)
-                : new Date(year, month, 0),
-            }
-          : {}),
+        date_to: moment().format('YYYY-MM-DD'),
+        date_from: moment().subtract(7, 'd').format('YYYY-MM-DD'),
       };
-
       if (locationId) {
         query = { ...query, location: locationId, spatial: 'location' };
       } else if (projectId) {
@@ -105,12 +91,12 @@ export default function TimeSeriesCard({
     return () => {
       setState(defaultState);
     };
-  }, [activeTab, temporal, dateRange]);
+  }, [activeTab, temporal]);
 
   if (!fetched && !fetching) {
     return null;
   }
-  console.log('data', data);
+
   return (
     <Card
       gridColumn={'1  / -1'}
@@ -133,12 +119,12 @@ export default function TimeSeriesCard({
         <ChartContainer className="card__body">
           {fetching ? (
             <LoadingMessage />
-          ) : data && data.length ? (
+          ) : data ? (
             <LineChart
               data={data.map(m => ({ x: new Date(m[temporal]), y: m.average }))}
             />
           ) : (
-            <ErrorMessage instructions="Please try a different time" />
+            <ErrorMessage />
           )}
         </ChartContainer>
       )}
@@ -154,5 +140,4 @@ TimeSeriesCard.propTypes = {
       parameter: T.string.isRequired,
     })
   ),
-  dateRange: T.string,
 };

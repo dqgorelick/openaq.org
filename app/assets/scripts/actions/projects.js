@@ -26,7 +26,9 @@ export function fetchProjects(page = 1, filters, limit = 15) {
   return function (dispatch) {
     dispatch(requestProjects());
 
-    let f = buildAPIQS(filters, { arrayFormat: 'repeat' });
+    let f = buildAPIQS(filters);
+
+    // console.log('url', `${config.api}/projects?page=${page}&limit=${limit}&${f}`);
 
     fetch(
       `${config.api}/projects?page=${page}&limit=${limit}&metadata=true&${f}`

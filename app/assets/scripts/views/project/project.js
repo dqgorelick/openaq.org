@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { PropTypes as T } from 'prop-types';
 import fetch from 'isomorphic-fetch';
-import qs from 'qs';
 
 import { HeaderMessage } from '../../components/header';
 import Header from '../../components/header';
-import { buildQS } from '../../utils/url';
 
 import styled from 'styled-components';
 import CardList from '../../components/card-list';
@@ -17,7 +15,6 @@ import MeasureandsCard from '../../components/dashboard/measurands-card';
 import TemporalCoverageCard from '../../components/dashboard/temporal-coverage-card';
 import TimeSeriesCard from '../../components/dashboard/time-series-card';
 import MapCard from '../../components/dashboard/map-card';
-import DateSelector from '../../components/date-selector';
 
 const defaultState = {
   fetched: false,
@@ -30,20 +27,8 @@ const Dashboard = styled(CardList)`
   padding: 2rem 4rem;
 `;
 
-function Project({ match, history, location }) {
-  const { id } = match.params;
-
-  const [dateRange, setDateRange] = useState(
-    qs.parse(location.search, { ignoreQueryPrefix: true }).dateRange
-  );
-
-  useEffect(() => {
-    let query = qs.parse(location.search, {
-      ignoreQueryPrefix: true,
-    });
-    query.dateRange = dateRange;
-    history.push(`${location.pathname}?${buildQS(query)}`);
-  }, [dateRange]);
+function Project(props) {
+  const { id } = props.match.params;
 
   const [{ fetched, fetching, error, data }, setState] = useState(defaultState);
 
@@ -126,14 +111,13 @@ function Project({ match, history, location }) {
         title={data.name}
         subtitle={data.subtitle}
         action={{
-          api: `${config.apiDocs}`,
+          api: `${config.api}/projects/${data.id}`,
           download: () => {},
         }}
         sourceType={data.sourceType}
         isMobile={data.isMobile}
       />
       <div className="inpage__body">
-        <DateSelector setDateRange={setDateRange} dateRange={dateRange} />
         <Dashboard
           gridTemplateRows={'repeat(4, 20rem)'}
           gridTemplateColumns={'repeat(12, 1fr)'}
@@ -168,8 +152,6 @@ function Project({ match, history, location }) {
 
 Project.propTypes = {
   match: T.object, // from react-router
-  history: T.object,
-  location: T.object,
 };
 
 export default Project;

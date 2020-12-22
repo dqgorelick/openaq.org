@@ -52,10 +52,8 @@ export default function ProjectsHub({
     setPage(() => getPage(query));
     setFilters({
       order_by: query.order_by,
-      sort: 'desc',
-      parameter:
-        query.parameters &&
-        query.parameters.split(',').map(param => param.toLowerCase()),
+      sort: 'asc',
+      parameter: query.parameters,
     });
   }, [location]);
 

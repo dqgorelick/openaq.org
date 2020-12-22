@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { PropTypes as T } from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { useHistory, useLocation } from 'react-router-dom';
-import qs from 'qs';
 
 import { openDownloadModal } from '../../actions/action-creators';
 import config from '../../config';
@@ -17,9 +15,8 @@ import SourcesCard from '../../components/dashboard/sources-card';
 import MeasureandsCard from '../../components/dashboard/measurands-card';
 import TemporalCoverageCard from '../../components/dashboard/temporal-coverage-card';
 import TimeSeriesCard from '../../components/dashboard/time-series-card';
-import { buildQS } from '../../utils/url';
-
-import DateSelector from '../../components/date-selector';
+import MapCard from '../../components/dashboard/map-card';
+import NearbyLocations from './nearby-locations';
 
 const Dashboard = styled(CardList)`
   padding: 2rem 4rem;
@@ -33,21 +30,7 @@ const defaultState = {
 };
 
 function Location(props) {
-  let history = useHistory();
-  let location = useLocation();
   const { id } = props.match.params;
-
-  const [dateRange, setDateRange] = useState(
-    qs.parse(location.search, { ignoreQueryPrefix: true }).dateRange
-  );
-
-  useEffect(() => {
-    let query = qs.parse(location.search, {
-      ignoreQueryPrefix: true,
-    });
-    query.dateRange = dateRange;
-    history.push(`${location.pathname}?${buildQS(query)}`);
-  }, [dateRange]);
 
   const [{ fetched, fetching, error, data }, setState] = useState(defaultState);
 
@@ -139,15 +122,14 @@ function Location(props) {
         title={data.name}
         subtitle={`in ${data.city}, ${data.country}`}
         action={{
-          api: `${config.apiDocs}`,
+          api: `${config.api}/locations?location=${data.id}`,
           download: onDownloadClick,
-          // compare: `/compare/${encodeURIComponent(data.id)}`,
+          compare: `/compare/${encodeURIComponent(data.id)}`,
         }}
         sourceType={data.sourceType}
         isMobile={data.isMobile}
       />
       <div className="inpage__body">
-        <DateSelector setDateRange={setDateRange} dateRange={dateRange} />
         <Dashboard
           gridTemplateRows={'repeat(4, 20rem)'}
           gridTemplateColumns={'repeat(12, 1fr)'}
@@ -170,16 +152,29 @@ function Location(props) {
             locationId={data.id}
             parameters={data.parameters}
             xUnit="day"
-            dateRange={dateRange}
+          />
+          <MeasureandsCard parameters={data.parameters} />
+          <MapCard
+            parameters={data.parameters}
+            isMobile={data.isMobile}
+            locationId={data.id}
+            center={[data.coordinates.longitude, data.coordinates.latitude]}
+            points={data.points}
           />
           <TemporalCoverageCard
             parameters={data.parameters}
             spatial="location"
             id={data.id}
-            dateRange={dateRange}
           />
-          <MeasureandsCard parameters={data.parameters} />
         </Dashboard>
+        <NearbyLocations
+          locationId={data.id}
+          center={[data.coordinates.longitude, data.coordinates.latitude]}
+          city={data.city}
+          country={data.country}
+          parameters={[data.parameters[0]]}
+          activeParameter={data.parameters[0].parameter}
+        />
       </div>
     </section>
   );

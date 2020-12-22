@@ -3,16 +3,16 @@ import { PropTypes as T } from 'prop-types';
 
 import Card from '../card';
 import Table from '../table';
-import { shortenLargeNumber, round } from '../../utils/format';
+import { shortenLargeNumber } from '../../utils/format';
 
 const initData = {
-  parameter: {
+  pollutant: {
     values: [],
     formatHeader: v => v.toUpperCase(),
     style: {
       color: 'black',
       fontWeight: 700,
-      textAlign: 'center',
+      textAlign: 'left',
     },
   },
   avg: {
@@ -50,16 +50,17 @@ const prepareData = data => {
     }
     return accum;
   }, {});
+
   const preparedData = Object.entries(combinedData).reduce(
-    (acc, [parameter, stats]) => {
+    (acc, [pollutant, stats]) => {
       acc = {
-        parameter: {
-          ...acc.parameter,
-          values: [...acc.parameter.values, parameter],
+        pollutant: {
+          ...acc.pollutant,
+          values: [...acc.pollutant.values, pollutant],
         },
         avg: {
           ...acc.avg,
-          values: [...acc.avg.values, round(stats.value, 2)],
+          values: [...acc.avg.values, stats.value],
         },
         count: {
           ...acc.count,
@@ -76,7 +77,7 @@ const prepareData = data => {
 export default function MeasureandsCard({ parameters }) {
   return (
     <Card
-      gridColumn={'1 / -1'}
+      gridColumn={'1 / 5'}
       title="Parameters"
       renderBody={() => {
         return <Table data={prepareData(parameters)} />;
