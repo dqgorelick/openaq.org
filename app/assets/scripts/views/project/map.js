@@ -11,26 +11,29 @@ import Legend from '../../components/map/legend';
 
 export default function DatasetLocations({
   country,
-  locationId,
+  locationIds,
   parameters,
   activeParameter,
 }) {
   return (
-    <section className="fold" id="location-fold-nearby">
-      <div className="inner">
-        <div className="fold__body">
-          <MapComponent bbox={getCountryBbox(country)}>
-            <LocationsSource activeParameter={activeParameter}>
-              <MeasurementsLayer activeParameter={activeParameter} />
+    <section className="fold" id="location-fold-dataset">
+      <div className="fold__body">
+        <MapComponent bbox={getCountryBbox(country)}>
+          <LocationsSource activeParameter={activeParameter}>
+            <MeasurementsLayer activeParameter={activeParameter} />
+            {/* {locationIds.map(location => (
               <LocationLayer
                 activeParameter={activeParameter}
-                locationId={locationId}
+                locationId={location}
               />
-            </LocationsSource>
-
-            <Legend parameters={parameters} activeParameter={activeParameter} />
-          </MapComponent>
-        </div>
+            ))} */}
+            <LocationLayer
+              activeParameter={activeParameter}
+              locationId={locationIds[0]}
+            />
+          </LocationsSource>
+          <Legend parameters={parameters} activeParameter={activeParameter} />
+        </MapComponent>
       </div>
     </section>
   );

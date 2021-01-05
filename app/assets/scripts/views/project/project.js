@@ -95,7 +95,6 @@ function Project({ match, history, location }) {
   if (error || !data) {
     return <ErrorHeader />;
   }
-  console.log('data', data);
 
   return (
     <section className="inpage">
@@ -114,7 +113,7 @@ function Project({ match, history, location }) {
         <DateSelector setDateRange={setDateRange} dateRange={dateRange} />
         <DatasetLocations
           country={data.countries[0]}
-          locationId={id}
+          locationIds={data.locationids}
           parameters={[data.parameters[0]]}
           activeParameter={data.parameters[0].parameter}
         />
