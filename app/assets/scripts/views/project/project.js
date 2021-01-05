@@ -3,8 +3,6 @@ import { PropTypes as T } from 'prop-types';
 import fetch from 'isomorphic-fetch';
 import qs from 'qs';
 
-import { HeaderMessage } from '../../components/header';
-import Header from '../../components/header';
 import { buildQS } from '../../utils/url';
 
 import styled from 'styled-components';
@@ -17,6 +15,8 @@ import MeasureandsCard from '../../components/dashboard/measurands-card';
 import TemporalCoverageCard from '../../components/dashboard/temporal-coverage-card';
 import TimeSeriesCard from '../../components/dashboard/time-series-card';
 import DateSelector from '../../components/date-selector';
+import DatasetLocations from './map';
+import Header, { LoadingHeader, ErrorHeader } from '../../components/header';
 
 const defaultState = {
   fetched: false,
@@ -89,34 +89,13 @@ function Project({ match, history, location }) {
   }
 
   if (fetching) {
-    return (
-      <HeaderMessage>
-        <h1>Take a deep breath.</h1>
-        <div className="prose prose--responsive">
-          <p>Location data is loading...</p>
-        </div>
-      </HeaderMessage>
-    );
+    return <LoadingHeader />;
   }
 
   if (error || !data) {
-    return (
-      <HeaderMessage>
-        <h1>Uh oh, something went wrong.</h1>
-        <div className="prose prose--responsive">
-          <p>
-            There was a problem getting the data. If you continue to have
-            problems, please let us know.
-          </p>
-          <p>
-            <a href="mailto:info@openaq.org" title="Send us an email">
-              Send us an Email
-            </a>
-          </p>
-        </div>
-      </HeaderMessage>
-    );
+    return <ErrorHeader />;
   }
+  console.log('data', data);
 
   return (
     <section className="inpage">
@@ -133,6 +112,18 @@ function Project({ match, history, location }) {
       />
       <div className="inpage__body">
         <DateSelector setDateRange={setDateRange} dateRange={dateRange} />
+        <DatasetLocations
+          country={data.countries[0]}
+          locationId={id}
+          parameters={[data.parameters[0]]}
+          activeParameter={data.parameters[0].parameter}
+        />
+        <header
+          className="fold__header inner"
+          style={{ gridTemplateColumns: `1fr` }}
+        >
+          <h1 className="fold__title">Values for selected stations</h1>
+        </header>
         <Dashboard
           gridTemplateRows={'repeat(4, 20rem)'}
           gridTemplateColumns={'repeat(12, 1fr)'}
