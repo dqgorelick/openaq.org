@@ -110,7 +110,6 @@ export default function TimeSeriesCard({
   if (!fetched && !fetching) {
     return null;
   }
-
   return (
     <Card
       gridColumn={'1  / -1'}
