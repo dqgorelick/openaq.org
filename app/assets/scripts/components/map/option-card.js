@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import c from 'classnames';
 
 export default function OptionCard({ toggleAllLocations, isAllLocations }) {
-  console.log('card isAllLocations', isAllLocations);
   const handle = e => {
-    console.log('CLICK');
-    toggleAllLocations(!e.target.checked);
+    toggleAllLocations(e.target.value === 'isAllLocations');
   };
 
   return (
@@ -17,7 +15,7 @@ export default function OptionCard({ toggleAllLocations, isAllLocations }) {
           id="isAllLocations"
           name="selectLocations"
           checked={isAllLocations}
-          value={true}
+          value="isAllLocations"
         />
         <label htmlFor="isAllLocations">All locations selected</label>
         <input
@@ -25,7 +23,7 @@ export default function OptionCard({ toggleAllLocations, isAllLocations }) {
           id="isNodeSelection"
           name="selectLocations"
           checked={!isAllLocations}
-          value={false}
+          value="isNodeSelection"
         />
         <label htmlFor="isNodeSelection">Select locations</label>
       </form>

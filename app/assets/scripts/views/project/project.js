@@ -35,7 +35,7 @@ function Project({ match, history, location }) {
   const [dateRange, setDateRange] = useState(
     qs.parse(location.search, { ignoreQueryPrefix: true }).dateRange
   );
-  const [isAllLocations, toggleAllLocations] = useState(true);
+  const [isAllLocations, toggleAllLocations] = useState(false);
 
   useEffect(() => {
     let query = qs.parse(location.search, {
@@ -85,11 +85,6 @@ function Project({ match, history, location }) {
     };
   }, []);
 
-  const setToggle = new => {
-    console.log('project toggle', new)
-    toggleAllLocations(new)
-      }
-
   if (!fetched && !fetching) {
     return null;
   }
@@ -121,7 +116,7 @@ function Project({ match, history, location }) {
           locationIds={data.locationIds}
           parameters={[data.parameters[0]]}
           activeParameter={data.parameters[0].parameter}
-          toggleAllLocations={setToggle}
+          toggleAllLocations={toggleAllLocations}
           isAllLocations={isAllLocations}
         />
         <header

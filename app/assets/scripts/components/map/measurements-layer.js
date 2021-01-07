@@ -20,6 +20,7 @@ export default function MeasurementsLayer({
   sourceId,
 }) {
   let match = useRouteMatch();
+  console.log('start', isAllLocations);
 
   useEffect(() => {
     map.addLayer({
@@ -65,6 +66,7 @@ export default function MeasurementsLayer({
       }
 
       let popoverElement = document.createElement('div');
+      console.log('here', isAllLocations);
       ReactDOM.render(
         <Popover
           activeParameter={activeParameter}
@@ -96,7 +98,35 @@ export default function MeasurementsLayer({
       if (map.getLayer(`${activeParameter}-outline`))
         map.removeLayer(`${activeParameter}-outline`);
     };
-  }, [sourceId]);
+  }, [sourceId, isAllLocations]);
+
+  useEffect(() => {
+    map.on('click', `${activeParameter}-layer`, function (e) {
+      const coordinates = e.features[0].geometry.coordinates.slice();
+
+      // Ensure that if the map is zoomed out such that multiple
+      // copies of the feature are visible, the popup appears
+      // over the copy being pointed to.
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+
+      let popoverElement = document.createElement('div');
+      ReactDOM.render(
+        <Popover
+          activeParameter={activeParameter}
+          isAllLocations={isAllLocations}
+          locationId={e.features[0].properties.locationId}
+          currentPage={parseInt(match.params.id, 10)}
+        />,
+        popoverElement
+      );
+      new mapbox.Popup()
+        .setLngLat(coordinates)
+        .setDOMContent(popoverElement)
+        .addTo(map);
+    });
+  }, [isAllLocations]);
 
   return null;
 }
