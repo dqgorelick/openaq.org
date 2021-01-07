@@ -8,30 +8,41 @@ import LocationsSource from '../../components/map/locations-source';
 import MeasurementsLayer from '../../components/map/measurements-layer';
 import LocationLayer from '../../components/map/location-layer';
 import Legend from '../../components/map/legend';
+import OptionCard from '../../components/map/option-card';
 
 export default function DatasetLocations({
   country,
   locationIds,
   parameters,
   activeParameter,
+  toggleAllLocations,
+  isAllLocations,
 }) {
   return (
     <section className="fold" id="location-fold-dataset">
       <div className="fold__body">
         <MapComponent bbox={getCountryBbox(country)}>
           <LocationsSource activeParameter={activeParameter}>
-            <MeasurementsLayer activeParameter={activeParameter} />
-            {/* {locationIds.map(location => (
+            <MeasurementsLayer
+              activeParameter={activeParameter}
+              isAllLocations={isAllLocations}
+            />
+            {locationIds.map(location => (
               <LocationLayer
                 activeParameter={activeParameter}
                 locationId={location}
               />
-            ))} */}
-            <LocationLayer
+            ))}
+            {/* <LocationLayer
               activeParameter={activeParameter}
               locationId={locationIds[0]}
-            />
+            /> */}
           </LocationsSource>
+
+          <OptionCard
+            toggleAllLocations={toggleAllLocations}
+            isAllLocations={isAllLocations}
+          />
           <Legend parameters={parameters} activeParameter={activeParameter} />
         </MapComponent>
       </div>

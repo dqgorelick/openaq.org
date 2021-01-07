@@ -35,6 +35,7 @@ function Project({ match, history, location }) {
   const [dateRange, setDateRange] = useState(
     qs.parse(location.search, { ignoreQueryPrefix: true }).dateRange
   );
+  const [isAllLocations, toggleAllLocations] = useState(true);
 
   useEffect(() => {
     let query = qs.parse(location.search, {
@@ -84,6 +85,11 @@ function Project({ match, history, location }) {
     };
   }, []);
 
+  const setToggle = new => {
+    console.log('project toggle', new)
+    toggleAllLocations(new)
+      }
+
   if (!fetched && !fetching) {
     return null;
   }
@@ -95,7 +101,6 @@ function Project({ match, history, location }) {
   if (error || !data) {
     return <ErrorHeader />;
   }
-
   return (
     <section className="inpage">
       <Header
@@ -113,9 +118,11 @@ function Project({ match, history, location }) {
         <DateSelector setDateRange={setDateRange} dateRange={dateRange} />
         <DatasetLocations
           country={data.countries[0]}
-          locationIds={data.locationids}
+          locationIds={data.locationIds}
           parameters={[data.parameters[0]]}
           activeParameter={data.parameters[0].parameter}
+          toggleAllLocations={setToggle}
+          isAllLocations={isAllLocations}
         />
         <header
           className="fold__header inner"

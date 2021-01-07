@@ -13,7 +13,12 @@ import {
 import { generateColorStops } from '../../utils/colors';
 import Popover from './popover';
 
-export default function MeasurementsLayer({ activeParameter, map, sourceId }) {
+export default function MeasurementsLayer({
+  activeParameter,
+  isAllLocations,
+  map,
+  sourceId,
+}) {
   let match = useRouteMatch();
 
   useEffect(() => {
@@ -63,6 +68,7 @@ export default function MeasurementsLayer({ activeParameter, map, sourceId }) {
       ReactDOM.render(
         <Popover
           activeParameter={activeParameter}
+          isAllLocations={isAllLocations}
           locationId={e.features[0].properties.locationId}
           currentPage={parseInt(match.params.id, 10)}
         />,
@@ -97,6 +103,7 @@ export default function MeasurementsLayer({ activeParameter, map, sourceId }) {
 
 MeasurementsLayer.propTypes = {
   activeParameter: PropTypes.string.isRequired,
+  isAllLocations: PropTypes.bool.isRequired,
   sourceId: PropTypes.string,
   map: PropTypes.object,
 };
