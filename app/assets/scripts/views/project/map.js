@@ -31,6 +31,7 @@ export default function DatasetLocations({
               <LocationLayer
                 activeParameter={activeParameter}
                 locationId={location}
+                key={location}
               />
             ))}
             {/* <LocationLayer
@@ -51,10 +52,12 @@ export default function DatasetLocations({
 }
 
 DatasetLocations.propTypes = {
-  locationId: PropTypes.number.isRequired,
+  locationIds: PropTypes.array.isRequired,
   center: PropTypes.arrayOf(PropTypes.number),
   parameters: PropTypes.array,
   city: PropTypes.string,
   country: PropTypes.string,
   activeParameter: PropTypes.string,
+  isAllLocations: PropTypes.bool.isRequired,
+  toggleAllLocations: PropTypes.func.isRequired,
 };

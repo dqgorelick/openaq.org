@@ -1,15 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import c from 'classnames';
 
 export default function OptionCard({ toggleAllLocations, isAllLocations }) {
-  const handle = e => {
-    toggleAllLocations(e.target.value === 'isAllLocations');
-  };
-
   return (
     <div className="map__legend" style={{ top: `2rem`, height: `4rem` }}>
-      <form onChange={e => handle(e)}>
+      <form
+        onChange={e => toggleAllLocations(e.target.value === 'isAllLocations')}
+      >
         <input
           type="radio"
           id="isAllLocations"
@@ -32,5 +29,6 @@ export default function OptionCard({ toggleAllLocations, isAllLocations }) {
 }
 
 OptionCard.propTypes = {
-  setAllLocations: PropTypes.func.isRequired,
+  isAllLocations: PropTypes.bool.isRequired,
+  toggleAllLocations: PropTypes.func.isRequired,
 };

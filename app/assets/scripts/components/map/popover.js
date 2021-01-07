@@ -158,4 +158,5 @@ Popover.propTypes = {
   activeParameter: T.string.isRequired,
   locationId: T.number.isRequired,
   currentPage: T.number.isRequired,
+  isAllLocations: T.bool.isRequired,
 };
